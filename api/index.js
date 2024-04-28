@@ -21,3 +21,15 @@ app.listen(3001, () => console.log("Server started on port 3001"));
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+
+    const message = err.message || "Internal Server Error";
+
+    return res.status(statusCode).json({
+        success: false,
+        message,
+        statusCode: statusCode
+    })
+})
