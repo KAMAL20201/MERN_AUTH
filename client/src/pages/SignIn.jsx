@@ -9,18 +9,19 @@ export default function SignIn() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  console.log("kamal", error);
   const handleSubmit = async (e) => {
     try {
       setIsLoading(true);
       setError(false);
 
       e.preventDefault();
-      const response = await fetch("http://localhost:3001/api/auth/sign-in", {
+      const response = await fetch("http://localhost:5173/api/auth/sign-in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          origin: "http://localhost:5173",
         },
+        credentials: "include",
         body: JSON.stringify(formData),
       });
 

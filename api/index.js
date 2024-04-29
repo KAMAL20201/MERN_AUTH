@@ -18,12 +18,6 @@ mongoose
 const app = express();
 app.use(express.json());
 
-let corsOptions = {
-  origin: ["http://localhost:5173"],
-};
-
-app.use(cors(corsOptions));
-
 app.listen(3001, () => console.log("Server started on port 3001"));
 
 app.use("/api/user", userRoutes);
