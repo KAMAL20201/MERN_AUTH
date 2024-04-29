@@ -16,7 +16,7 @@ export default function SignUp() {
       setError(false);
 
       e.preventDefault();
-      const response = await fetch("/api/auth/signup", {
+      const response = await fetch("http://localhost:3001/api/auth/sign-up", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export default function SignUp() {
       </form>
       <div className="flex gap-2 mt-5">
         <p>Have an account?</p>
-        <Link to="/signin">
+        <Link to="/sign-in">
           <span className="text-blue-500 ">Sign in</span>
         </Link>
       </div>

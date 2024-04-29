@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import cors from "cors";
 dotenv.config();
 
 mongoose
@@ -17,19 +18,25 @@ mongoose
 const app = express();
 app.use(express.json());
 
+let corsOptions = {
+  origin: ["http://localhost:5173"],
+};
+
+app.use(cors(corsOptions));
+
 app.listen(3001, () => console.log("Server started on port 3001"));
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use((err, req, res, next) => {
-    const statusCode = err.statusCode || 500;
+  const statusCode = err.statusCode || 500;
 
-    const message = err.message || "Internal Server Error";
+  const message = err.message || "Internal Server Error";
 
-    return res.status(statusCode).json({
-        success: false,
-        message,
-        statusCode: statusCode
-    })
-})
+  return res.status(statusCode).json({
+    success: false,
+    message,
+    statusCode: statusCode,
+  });
+});
