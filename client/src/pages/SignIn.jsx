@@ -1,20 +1,26 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
- const navigate =  useNavigate();
+  const { loading, error } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  console.log("kamal", error  );
+
   const handleSubmit = async (e) => {
     try {
-      setIsLoading(true);
-      setError(false);
-
+      dispatch(signInStart());
       e.preventDefault();
       const response = await fetch("http://localhost:5173/api/auth/sign-in", {
         method: "POST",
@@ -27,15 +33,16 @@ export default function SignIn() {
       });
 
       const data = await response.json();
+
       if (data.success === false) {
-        setError(true);
+        dispatch(signInFailure(data.message));
         return;
       }
+      dispatch(signInSuccess(data));
+
       navigate("/");
     } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
+      dispatch(signInFailure(error));
     }
   };
 
@@ -59,10 +66,10 @@ export default function SignIn() {
         />
 
         <button
-          disabled={isLoading}
+          disabled={loading}
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
-          {isLoading ? "Signing In..." : "Sign In"}
+          {loading ? "Signing In..." : "Sign In"}
         </button>
       </form>
       <div className="flex gap-2 mt-5">
@@ -71,7 +78,9 @@ export default function SignIn() {
           <span className="text-blue-500 ">Sign up</span>
         </Link>
       </div>
-      <p className="text-red-700 mt-5">{error && "Something went wrong"}</p>
+      <p className="text-red-700 mt-5">
+        {error ? error || "Something went wrong" : null}
+      </p>
     </div>
   );
 }
