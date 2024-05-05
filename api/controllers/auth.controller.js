@@ -2,18 +2,27 @@ import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { sendMail } from "../utils/sendMail.js";
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
+  const randomString = crypto.randomBytes(128).toString("hex");
+  const emailVerified = false;
+  console.log(randomString);
+
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({
     username,
     email,
     password: hashedPassword,
+    uniqueString: randomString,
+    emailVerified,
   });
 
   try {
     await newUser.save();
+    sendMail(email, randomString);
     res.status(201).json({ message: "User created successfully" });
   } catch (err) {
     next(err);
@@ -49,7 +58,6 @@ export const signin = async (req, res, next) => {
 export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-
     if (user) {
       const token = jwt.sign({ id: user?._id }, process.env.JWT_SECRET);
 
@@ -96,4 +104,4 @@ export const google = async (req, res, next) => {
 
 export const signout = (req, res) => {
   res.clearCookie("access_token").status(200).json({ success: true });
-}
+};

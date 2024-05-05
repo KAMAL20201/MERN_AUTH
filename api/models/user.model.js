@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -20,6 +19,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       default:
         "https://cdn.pixabay.com/photo/2016/08/31/11/54/icon-1633249_1280.png",
+    },
+    uniqueString: {
+      type: String,
+      unique: true,
+    },
+    emailVerified: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
