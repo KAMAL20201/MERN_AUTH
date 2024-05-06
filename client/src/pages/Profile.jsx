@@ -106,7 +106,7 @@ export default function Profile() {
 
   const signOutHandler = async () => {
     try {
-      await fetch("http://localhost:5173/api/auth/signout");
+      await fetch("/api/auth/signout");
       dispatch(signOutSuccess());
     } catch (error) {
       console.log(error);
