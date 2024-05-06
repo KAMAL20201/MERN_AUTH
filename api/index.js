@@ -9,7 +9,7 @@ import path from "path";
 dotenv.config();
 
 mongoose
-  .connect(process.env.mongo)
+  .connect(process.env.MONGO)
   .then(() => {
     console.log("Database connected");
   })
