@@ -60,7 +60,7 @@ export default function Profile() {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     dispatch(updateUserStarts());
-    const userId = currentUser._id;
+    const userId = currentUser?._id;
     try {
       const response = await fetch(
         `http://localhost:5173/api/user/update/${userId}`,
@@ -88,7 +88,7 @@ export default function Profile() {
     try {
       dispatch(deleteUserStarts());
       const res = await fetch(
-        `http://localhost:5173/api/user/delete/${currentUser._id}`,
+        `http://localhost:5173/api/user/delete/${currentUser?._id}`,
         {
           method: "DELETE",
         }

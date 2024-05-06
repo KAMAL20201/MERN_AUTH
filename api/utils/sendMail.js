@@ -13,7 +13,7 @@ export const sendMail = (email, randomString) => {
     to: email,
     subject: "Mern-Auth Verify",
     text: "That was easy!",
-    html: `Click <a href=http://localhost:3001/api/user/verify/${randomString}>here</a> to verify your account`,
+    html: `Click <a href=http://localhost:3001/verify/${randomString}>here</a> to verify your account`,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

@@ -33,22 +33,24 @@ app.get("/verify/:id", async (req, res) => {
     user.uniqueString = "";
 
     await user.save();
-    res.redirect(process.env.CLIENT_URL + "?token=" + token);
+    res.redirect(process.env.CLIENT_URL + "/sign-in?token=" + token);
   } else {
     return res.redirect(
-      process.env.CLIENT_URL + "?token=invalid_code_detected"
+      process.env.CLIENT_URL + "/sign-in?token=invalid_code_detected"
     );
   }
 });
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
+  const code = err.code || "SOMETHING_WENT_WRONG";
 
   const message = err.message || "Internal Server Error";
 
   return res.status(statusCode).json({
     success: false,
     message,
+    code,
     statusCode: statusCode,
   });
 });

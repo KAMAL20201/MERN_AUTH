@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   signInFailure,
   signInStart,
@@ -11,12 +11,12 @@ export default function SignIn() {
   const [formData, setFormData] = useState({});
   const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const dispatch = useDispatch();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-
 
   const handleSubmit = async (e) => {
     try {
@@ -38,7 +38,7 @@ export default function SignIn() {
         dispatch(signInFailure(data.message));
         return;
       }
-      dispatch(signInSuccess(data));
+      dispatch(signInSuccess(data?.validUser));
 
       navigate("/");
     } catch (error) {
@@ -56,6 +56,7 @@ export default function SignIn() {
           id="email"
           className="bg-slate-100 p-3 rounded-lg"
           onChange={handleChange}
+          defaultValue={location.state?.email}
         />
         <input
           type="password"
@@ -71,7 +72,7 @@ export default function SignIn() {
         >
           {loading ? "Signing In..." : "Sign In"}
         </button>
-        <OAuth/>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-5">
         <p>New User?</p>

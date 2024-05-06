@@ -10,6 +10,18 @@ export const signup = async (req, res, next) => {
   const randomString = crypto.randomBytes(128).toString("hex");
   const emailVerified = false;
   console.log(randomString);
+  const userEmail = await User.findOne({ email });
+  const userName = await User.findOne({ username });
+  if (userEmail) {
+    return next(
+      errorHandler(409, "User already exists", "EMAIL_ALREADY_EXISTS")
+    );
+  }
+  if (userName) {
+    return next(
+      errorHandler(409, "User already exists", "USERNAME_ALREADY_EXISTS")
+    );
+  }
 
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({

@@ -40,5 +40,5 @@ export default function Container({ children }) {
     return () => clearTimeout(timer);
   }, [currentUser, handleWindowLoad]);
 
-  return <div className="flex w-screen h-screen">{children}</div>;
+  return <div className="flex w-full h-full">{children}</div>;
 }
