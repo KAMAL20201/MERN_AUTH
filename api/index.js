@@ -5,6 +5,7 @@ import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
 import User from "./models/user.model.js";
+import cors from 'cors';
 dotenv.config();
 
 mongoose
@@ -19,6 +20,7 @@ mongoose
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 app.use(cookieParser());
 
 app.listen(3001, () => console.log("Server started on port 3001"));
