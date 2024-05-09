@@ -55,13 +55,15 @@ export const signin = async (req, res, next) => {
       return next(errorHandler(401, "Invalid Credentials"));
     }
 
-    const token = jwt.sign({ id: validUser?._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      {
+        id: validUser?._id,
+      },
+      process.env.JWT_SECRET
+    );
 
     const expiryDate = new Date(Date.now() + 3600000);
-    res
-      .cookie("access_token", token, { expires: expiryDate })
-      .status(200)
-      .json({ validUser });
+    res.status(200).json({ validUser, token });
   } catch (err) {
     next(err);
   }
@@ -76,13 +78,7 @@ export const google = async (req, res, next) => {
       const { password: hashedPassword, ...rest } = user._doc;
       const expiryDate = new Date(Date.now() + 3600000);
 
-      res
-        .cookie("access_token", token, {
-  
-          expires: expiryDate,
-        })
-        .status(200)
-        .json(rest);
+      res.status(200).json({ ...rest, token });
     } else {
       const generatedPassword = Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
@@ -101,13 +97,7 @@ export const google = async (req, res, next) => {
       const { password: hashedPassword2, ...rest } = newUser._doc;
       const expiryDate = new Date(Date.now() + 3600000);
 
-      res
-        .cookie("access_token", token, {
-     
-          expires: expiryDate,
-        })
-        .status(200)
-        .json(rest);
+      res.status(200).json({ ...rest, token });
     }
   } catch (err) {
     next(err);
